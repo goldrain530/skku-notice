@@ -1,0 +1,436 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>성대 공지 한눈에</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&family=Noto+Serif+KR:wght@700&display=swap">
+<style>
+/* Layout concept: a campus bulletin board. PC = category rail + dense rows with a deadline column; phone = scrolling tab strip + stacked cards. */
+:root{
+  --bg:#f2f5f1; --surface:#ffffff; --ink:#15211a; --muted:#5a6a61; --line:#d8e0da;
+  --accent:#0f6b43; --accent-ink:#ffffff; --accent-soft:#e1f0e8;
+  --warn:#a84f12; --warn-bg:#fbeadb; --read:#8a978f;
+  --font-body:'Noto Sans KR',system-ui,-apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;
+  --font-display:'Noto Serif KR','Batang',serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0e1512; --surface:#16201b; --ink:#e8efe9; --muted:#96a79c; --line:#2a382f;
+    --accent:#4cc48a; --accent-ink:#06150d; --accent-soft:#1a2e24;
+    --warn:#f0a266; --warn-bg:#3a2412; --read:#6c7b72; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0e1512; --surface:#16201b; --ink:#e8efe9; --muted:#96a79c; --line:#2a382f;
+  --accent:#4cc48a; --accent-ink:#06150d; --accent-soft:#1a2e24;
+  --warn:#f0a266; --warn-bg:#3a2412; --read:#6c7b72; color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--ink); font-family:var(--font-body); font-size:15px; line-height:1.55;
+  padding-left:max(16px,env(safe-area-inset-left,0px)); padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-block:0 48px; word-break:keep-all; overflow-wrap:anywhere;
+}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:30}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.app{max-width:1180px;margin:0 auto}
+.app[data-mode="phone"]{max-width:430px}
+
+/* header */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);padding:14px 0 10px;border-bottom:1px solid var(--line);display:flex;flex-wrap:wrap;gap:10px 12px;align-items:flex-end;justify-content:space-between}
+.brand{min-width:0}
+h1{font-family:var(--font-display);font-size:24px;line-height:1.2;margin:0;text-wrap:balance;letter-spacing:-.01em}
+.sub{margin:2px 0 0;color:var(--muted);font-size:13px}
+.tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;padding:2px;background:var(--surface)}
+.seg button{border:0;background:none;color:var(--muted);padding:5px 13px;border-radius:999px;font-size:13px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink);font-weight:500}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:6px 12px;font-size:13px;cursor:pointer}
+.btn:hover{border-color:var(--accent)}
+.btn.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);font-weight:500}
+
+/* layout */
+.layout{display:grid;gap:18px;padding-top:16px}
+.app[data-mode="pc"] .layout{grid-template-columns:196px minmax(0,1fr);gap:28px}
+.main{min-width:0}
+
+/* tabs */
+.tabs{display:flex;gap:6px;min-width:0}
+.app[data-mode="pc"] .tabs{flex-direction:column;position:sticky;top:96px;align-self:start}
+.app[data-mode="phone"] .tabs{flex-basis:100%;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}
+.tab{display:flex;align-items:center;justify-content:space-between;gap:8px;border:1px solid transparent;background:none;border-radius:8px;padding:8px 10px;font-size:14px;cursor:pointer;text-align:left;white-space:nowrap}
+.app[data-mode="phone"] .tab{border-color:var(--line);background:var(--surface);border-radius:999px;padding:6px 12px;flex:0 0 auto}
+.tab:hover{background:var(--accent-soft)}
+.tab[aria-selected="true"]{background:var(--accent);color:var(--accent-ink);font-weight:500}
+.tab .cnt{font-variant-numeric:tabular-nums;font-size:12px;opacity:.75}
+.tab.me{border-color:var(--accent);color:var(--accent);font-weight:500}
+.tab.me[aria-selected="true"]{color:var(--accent-ink)}
+.tabsep{height:1px;background:var(--line);margin:6px 0}
+.app[data-mode="phone"] .tabsep{display:none}
+@media (max-width:700px){
+  .app[data-mode="pc"] .layout{grid-template-columns:104px minmax(0,1fr);gap:12px}
+  .app[data-mode="pc"] .tab{font-size:12.5px;padding:7px 6px}
+  .app[data-mode="pc"] .tab .cnt{display:none}
+}
+
+/* controls */
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.controls input[type="search"]{flex:1 1 180px;min-width:0;border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 12px}
+.controls select{border:1px solid var(--line);background:var(--surface);border-radius:8px;padding:8px 10px}
+
+/* urgent strip */
+.urgent{margin-bottom:16px}
+.urgent h2,.listhead h2{font-size:13px;margin:0 0 8px;color:var(--muted);font-weight:500;letter-spacing:.04em}
+.urg-row{display:flex;gap:8px;overflow-x:auto;padding-bottom:4px}
+.urg{flex:0 0 auto;width:210px;border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 12px;text-decoration:none;display:flex;flex-direction:column;gap:4px}
+.urg:hover{border-color:var(--warn)}
+.urg b{font-size:13px;line-height:1.4;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.urg small{color:var(--muted);font-size:12px}
+
+/* notice rows */
+.listhead{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.listhead .stamp{font-size:12px;color:var(--muted)}
+.n{display:grid;gap:6px 12px;border-bottom:1px solid var(--line)}
+.app[data-mode="pc"] .n{grid-template-columns:84px minmax(0,1fr) 96px 64px;padding:14px 4px;align-items:start}
+.app[data-mode="phone"] .n{grid-template-columns:1fr auto;grid-template-areas:"cat dl" "main main";background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-bottom:10px;align-items:center}
+.app[data-mode="phone"] .c-cat{grid-area:cat}
+.app[data-mode="phone"] .c-dl{grid-area:dl}
+.app[data-mode="phone"] .c-main{grid-area:main}
+.app[data-mode="phone"] .c-date{display:none}
+.app[data-mode="pc"] .m-date{display:none}
+.chip{display:inline-block;font-size:12px;border:1px solid var(--line);border-radius:6px;padding:1px 8px;color:var(--muted);white-space:nowrap}
+.c-main{min-width:0}
+.ttl{font-weight:500;text-decoration:none;display:block;text-wrap:pretty}
+.ttl:hover{text-decoration:underline;text-decoration-color:var(--accent)}
+.n.read .ttl{color:var(--read);font-weight:400}
+.org{color:var(--accent);font-size:13px;font-weight:500}
+.meta{display:flex;flex-wrap:wrap;gap:2px 10px;font-size:12.5px;color:var(--muted);margin-top:3px;font-variant-numeric:tabular-nums}
+.new{background:var(--accent);color:var(--accent-ink);font-size:11px;font-weight:700;border-radius:4px;padding:0 5px;margin-left:6px;vertical-align:1px}
+.dl{display:inline-flex;flex-direction:column;align-items:center;border-radius:8px;padding:3px 9px;font-size:13px;font-weight:700;background:var(--accent-soft);color:var(--accent);font-variant-numeric:tabular-nums;line-height:1.3}
+.dl small{font-weight:400;font-size:11px}
+.dl.hot{background:var(--warn-bg);color:var(--warn)}
+.dl.off{background:none;color:var(--muted);font-weight:400}
+.c-date{font-size:12.5px;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums}
+.why{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.why span{font-size:12px;background:var(--accent-soft);color:var(--accent);border-radius:999px;padding:1px 9px}
+.hint{margin-top:6px;font-size:12.5px;color:var(--muted)}
+.empty{border:1px dashed var(--line);border-radius:12px;padding:28px 18px;text-align:center;color:var(--muted)}
+.empty p{margin:0 0 12px}
+.more{display:inline-block;margin-top:14px;font-size:13px;color:var(--accent)}
+
+/* drawer */
+.scrim{position:fixed;inset:0;background:rgba(0,0,0,.4);z-index:40}
+.drawer{position:fixed;top:0;right:0;bottom:0;width:min(440px,100%);background:var(--surface);z-index:50;overflow-y:auto;padding:calc(18px + env(safe-area-inset-top,0px)) max(18px,env(safe-area-inset-right,0px)) calc(28px + env(safe-area-inset-bottom,0px)) 18px;border-left:1px solid var(--line)}
+.drawer h2{font-family:var(--font-display);font-size:20px;margin:0}
+.drawer h3{font-size:14px;margin:22px 0 8px}
+.dhead{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.note{font-size:12.5px;color:var(--muted);margin:6px 0 0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fld{display:flex;flex-direction:column;gap:4px;min-width:0}
+.fld.full{grid-column:1/-1}
+.fld label,.legend{font-size:12.5px;color:var(--muted)}
+.fld input,.fld select{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 10px;min-width:0;width:100%}
+.checks{display:flex;flex-wrap:wrap;gap:6px}
+.checks label{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px;cursor:pointer;background:var(--bg)}
+.checks input{accent-color:var(--accent)}
+.checks label:has(input:checked){background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
+.actions{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+textarea.brief{width:100%;min-height:150px;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:10px;font-size:13px;line-height:1.5;resize:vertical}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(20px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:13px;z-index:60}
+@media (prefers-reduced-motion:no-preference){.drawer{animation:in .18s ease-out}@keyframes in{from{transform:translateX(24px);opacity:0}}}
+</style>
+
+<div class="app" id="app" data-mode="pc">
+  <header class="top" id="top">
+    <div class="brand">
+      <h1>성대 공지 한눈에</h1>
+      <p class="sub" id="today"></p>
+    </div>
+    <div class="tools">
+      <button class="btn primary" id="openProfile" type="button">내 정보</button>
+      <div class="seg" role="group" aria-label="화면 모드">
+        <button type="button" id="modePc" aria-pressed="true">컴퓨터</button>
+        <button type="button" id="modePhone" aria-pressed="false">폰</button>
+      </div>
+    </div>
+    <nav class="tabs" id="tabs" aria-label="공지 분류"></nav>
+  </header>
+  <div class="layout" id="layout">
+    <main class="main">
+      <div class="urgent" id="urgent" hidden></div>
+      <div class="controls">
+        <input type="search" id="q" placeholder="제목, 부서 검색" aria-label="공지 검색">
+        <select id="sort" aria-label="정렬">
+          <option value="date">최신순</option>
+          <option value="deadline">마감 임박순</option>
+          <option value="views">조회수순</option>
+        </select>
+      </div>
+      <div class="listhead"><h2 id="listTitle">전체</h2><span class="stamp" id="stamp"></span></div>
+      <div id="list"></div>
+      <a class="more" id="more" href="https://www.skku.edu/skku/campus/skk_comm/notice01.do" target="_blank" rel="noopener">성균관대 공지 원문 게시판에서 더 보기</a>
+    </main>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden></div>
+<aside class="drawer" id="drawer" role="dialog" aria-label="내 정보" hidden>
+  <div class="dhead"><h2>내 정보</h2><button class="btn" id="closeProfile" type="button">닫기</button></div>
+  <p class="note">입력한 정보는 이 브라우저에만 저장되고 어디로도 전송되지 않습니다. 비워둔 칸은 맞춤 계산에서 빠집니다.</p>
+  <form id="pform" autocomplete="off">
+    <h3>기본 정보</h3>
+    <div class="grid2">
+      <div class="fld"><label for="f-status">학적</label>
+        <select id="f-status"><option value="">선택</option><option>재학</option><option>휴학</option><option>졸업예정</option><option>대학원</option></select></div>
+      <div class="fld"><label for="f-grade">학년</label>
+        <select id="f-grade"><option value="">선택</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5 이상</option></select></div>
+      <div class="fld"><label for="f-campus">주 캠퍼스</label>
+        <select id="f-campus"><option value="">선택</option><option value="인문">인문사회과학(서울)</option><option value="자연">자연과학(수원)</option></select></div>
+      <div class="fld"><label for="f-college">단과대</label>
+        <select id="f-college"><option value="">선택</option></select></div>
+      <div class="fld full"><label for="f-major">전공 / 학과</label>
+        <input id="f-major" type="text" placeholder="예: 소프트웨어학과"></div>
+      <div class="fld"><label for="f-gpa">누적 학점 (4.5 만점)</label>
+        <input id="f-gpa" type="number" min="0" max="4.5" step="0.01" inputmode="decimal" placeholder="예: 3.85"></div>
+      <div class="fld"><label for="f-income">소득분위</label>
+        <select id="f-income"><option value="">모름 / 미해당</option><option>기초·차상위</option><option>1</option><option>2</option><option>3</option><option>4</option><option>5</option><option>6</option><option>7</option><option>8</option><option>9</option><option>10</option></select></div>
+    </div>
+    <h3>관심 분야</h3>
+    <div class="checks" id="interests"></div>
+    <h3>키워드</h3>
+    <div class="fld"><label for="f-kw" class="legend">쉼표로 구분. 제목에 들어 있으면 추천합니다.</label>
+      <input id="f-kw" type="text" placeholder="예: 인공지능, 교환학생, 근로장학"></div>
+    <div class="actions">
+      <button class="btn primary" type="submit">저장하고 적용</button>
+      <button class="btn" type="button" id="reset">초기화</button>
+    </div>
+  </form>
+  <h3>아침 브리핑</h3>
+  <p class="note">이 페이지에서는 문자를 보낼 수 없습니다. 매일 아침 8시 문자는 문자 발송 서비스와 매일 실행되는 작업이 따로 필요합니다. 대신 지금 기준의 요약 문구를 만들어 복사할 수 있습니다.</p>
+  <textarea class="brief" id="brief" readonly aria-label="오늘 브리핑 문구"></textarea>
+  <div class="actions"><button class="btn" type="button" id="copyBrief">브리핑 복사</button></div>
+</aside>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+(function(){
+  var BASE='https://www.skku.edu/skku/campus/skk_comm/';
+  var STAMP='2026-11-03 21:50';
+  var CATS=['학사','입학','취업','채용/모집','장학','행사/세미나','일반'];
+  var BOARD={'학사':'notice02','입학':'notice03','취업':'notice04','채용/모집':'notice05','장학':'notice06','행사/세미나':'notice07','일반':'notice08'};
+  var LABEL={scholarship:'장학',parttime:'알바·인턴·TA',seminar:'강연·세미나·행사',startup:'창업·공모전',exchange:'해외·교환',career:'취업 준비',academic:'학사',life:'캠퍼스 생활'};
+  var COLLEGES=['학부대학','유학대학','문과대학','사회과학대학','경제대학','경영대학','사범대학','예술대학','자연과학대학','정보통신대학','소프트웨어융합대학','공과대학','약학대학','생명공학대학','스포츠과학대학','의과대학','성균융합원','법학전문대학원','일반대학원'];
+
+  /* 공식 목록(2026-11-02~03 기준)에서 옮긴 데이터. dl = 마감일, tags/college/campus는 제목 기준으로 붙인 분류 */
+  var N=[
+    {id:141498,cat:'행사/세미나',title:'[창업지원단/실험실창업혁신단] 2026 SKKU UNITE 프리 텍스코어(11/28~29) 참가자 모집(이비스 앰배서더 수원, 총상금 350만원)',dept:'방민정',date:'2026-11-02',views:3430,file:1,tags:['startup'],note:'11/28~29 개최 · 총상금 350만원'},
+    {id:141494,cat:'행사/세미나',title:'[학생사회공헌단 다소미 X 학생성공센터] 2026 배워서 남 주는 프로젝트 성과공유회 개최 안내',dept:'학생성공센터행정실',date:'2026-11-02',views:3525,file:1,tags:['seminar']},
+    {id:141136,cat:'채용/모집',title:'2027년도 제16회 변호사시험 시험관리원(재학생) 모집(~11.8.(일)/조기마감 가능)',dept:'법학전문대학원행정실',date:'2026-10-30',views:49271,tags:['parttime'],college:'법학전문대학원',audience:'재학',dl:'2026-11-08',dlText:'11/8(일) · 조기마감 가능'},
+    {id:141131,cat:'채용/모집',title:'양자생명물리과학원 행정직원 모집',dept:'오주이',date:'2026-11-03',views:3701,file:1,tags:['parttime','career']},
+    {id:141041,cat:'채용/모집',title:'사범대학 에듀테크연구소 행정 직원 채용 공고',dept:'이승원',date:'2026-10-29',views:64085,tags:['parttime','career'],college:'사범대학'},
+    {id:140492,cat:'일반',title:'자연과학캠퍼스 통학 셔틀버스 시범운행 안내 (10/19~12/18)',dept:'학생지원팀',date:'2026-10-20',views:221425,file:1,tags:['life'],campus:'자연',pinned:1,note:'10/19~12/18 시범운행'},
+    {id:140948,cat:'행사/세미나',title:'[앵커사업단] 글로벌 창업경진대회 Soulmate Pioneers 참가팀 모집(~11/15, 총 상금 900만원)',dept:'심보경',date:'2026-11-03',views:14353,file:1,tags:['startup'],dl:'2026-11-15',dlText:'11/15 · 총상금 900만원'},
+    {id:141503,cat:'채용/모집',title:'(2027년 1학기) CAMPUS Asia 일본파견 교환장학생 모집 연장',dept:'유일현',date:'2026-11-02',views:802,file:1,tags:['exchange','scholarship']},
+    {id:141152,cat:'채용/모집',title:'통증 예측과 뇌 반응 연구 참여자 모집',dept:'김동호',date:'2026-11-02',views:2756,tags:['parttime']},
+    {id:140601,cat:'장학',title:'2026학년도 심산혁신장학금 장학생 선발안내( ~ 2026년 11월 6일(금) 오후 5시까지)',dept:'성현호',date:'2026-11-02',views:26076,file:1,tags:['scholarship'],dl:'2026-11-06',dlText:'11/6(금) 17:00'},
+    {id:140495,cat:'학사',title:'2026학년도 겨울 계절수업 본교생 → 타 대학 학점교류 수강 안내(진행 중)',dept:'교무팀',date:'2026-11-02',views:30203,file:1,tags:['academic']},
+    {id:140949,cat:'학사',title:'[성균융합원] 2027학년도 1학기 융합연구학점제 시행 안내(신청 ~11/25)',dept:'성균융합원',date:'2026-11-02',views:15168,file:1,tags:['academic'],dl:'2026-11-25',dlText:'11/25 신청 마감'},
+    {id:141425,cat:'일반',title:'2026 기숙사 생활 콘텐츠 공모전 실시 안내',dept:'명륜학사',date:'2026-11-02',views:3109,file:1,tags:['startup','life'],campus:'인문'},
+    {id:140807,cat:'취업',title:'[학생인재개발팀/대학일자리플러스센터] 2026 하반기 실전 모의면접[인사캠 추가 모집]',dept:'박은선',date:'2026-11-02',views:4651,file:1,tags:['career'],campus:'인문'},
+    {id:141486,cat:'행사/세미나',title:'[인권센터] 2026 성균관대학교 제5회 인권세미나 개최 안내',dept:'차남희',date:'2026-11-02',views:924,file:1,tags:['seminar']},
+    {id:140964,cat:'채용/모집',title:'[DS교육센터] 2026-2학기 DS교과지원 TA 모집',dept:'안지운',date:'2026-11-02',views:8424,file:1,tags:['parttime']}
+  ];
+
+  function $(id){return document.getElementById(id)}
+  function esc(s){return String(s).replace(/[&<>"]/g,function(c){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+  function store(k,v){try{if(v===undefined){return localStorage.getItem(k)}if(v===null){localStorage.removeItem(k)}else{localStorage.setItem(k,v)}}catch(e){}return null}
+  function dateOnly(s){var p=s.split('-');return new Date(+p[0],+p[1]-1,+p[2])}
+  var now=new Date(), todayMid=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  function daysTo(s){return Math.round((dateOnly(s)-todayMid)/864e5)}
+  function md(s){var p=s.split('-');return p[1]+'.'+p[2]}
+
+  /* 제목 앞 [기관] 분리 */
+  N.forEach(function(n){
+    var m=n.title.match(/^\[([^\]]+)\]\s*(.*)$/);
+    n.org=m?m[1]:''; n.text=m?m[2]:n.title;
+    n.url=BASE+'notice01.do?mode=view&articleNo='+n.id+'&article.offset=0&articleLimit=10';
+  });
+
+  var read={}; try{read=JSON.parse(store('skku_read')||'{}')}catch(e){}
+  var profile=null; try{profile=JSON.parse(store('skku_profile')||'null')}catch(e){}
+  var tab='all';
+
+  /* ---------- mode ---------- */
+  var app=$('app'), tabsEl=$('tabs'), top=$('top'), layout=$('layout');
+  var userMode=store('skku_mode');
+  function autoMode(){return window.innerWidth<760?'phone':'pc'}
+  function setMode(m,save){
+    app.dataset.mode=m;
+    $('modePc').setAttribute('aria-pressed',String(m==='pc'));
+    $('modePhone').setAttribute('aria-pressed',String(m==='phone'));
+    if(save){userMode=m;store('skku_mode',m)}
+    if(m==='phone'){top.appendChild(tabsEl)}else{layout.insertBefore(tabsEl,layout.firstChild)}
+  }
+  $('modePc').onclick=function(){setMode('pc',true)};
+  $('modePhone').onclick=function(){setMode('phone',true)};
+  window.addEventListener('resize',function(){if(!userMode){setMode(autoMode(),false)}});
+
+  /* ---------- matching ---------- */
+  function hasProfile(p){return !!p&&(p.interests&&p.interests.length||p.campus||p.college||p.major||p.kw||p.gpa||p.income)}
+  function match(n,p){
+    var s=0,r=[];
+    if(!hasProfile(p))return{s:0,r:r};
+    var ints=p.interests||[];
+    n.tags.forEach(function(t){if(ints.indexOf(t)>-1){s+=3;r.push('관심: '+LABEL[t])}});
+    if(n.campus&&p.campus&&n.campus===p.campus){s+=2;r.push(p.campus==='인문'?'내 캠퍼스(서울)':'내 캠퍼스(수원)')}
+    if(n.college&&p.college===n.college){s+=3;r.push('내 단과대')}
+    if(n.audience==='재학'&&p.status==='재학'){s+=1;r.push('재학생 대상')}
+    var title=n.title.toLowerCase();
+    if(p.major&&p.major.length>1&&title.indexOf(p.major.toLowerCase())>-1){s+=3;r.push('내 전공')}
+    (p.kw||'').split(',').forEach(function(k){k=k.trim().toLowerCase();if(k&&title.indexOf(k)>-1){s+=2;r.push('키워드: '+k)}});
+    if(n.tags.indexOf('scholarship')>-1&&(p.gpa||p.income)){s+=1;r.push('학점·소득분위 확인')}
+    if(s>0&&n.dl){var d=daysTo(n.dl);if(d>=0&&d<=7){s+=1}}
+    return{s:s,r:r};
+  }
+  function enrich(){N.forEach(function(n){var m=match(n,profile);n.score=m.s;n.reasons=m.r})}
+
+  /* ---------- render ---------- */
+  function isNew(n){return (todayMid-dateOnly(n.date))/864e5<=1}
+  function dlBadge(n){
+    if(!n.dl)return '<span class="dl off">상시</span>';
+    var d=daysTo(n.dl);
+    if(d<0)return '<span class="dl off">마감</span>';
+    var t=d===0?'오늘 마감':'D-'+d;
+    return '<span class="dl'+(d<=3?' hot':'')+'">'+t+'<small>'+esc(n.dlText||'')+'</small></span>';
+  }
+  function row(n){
+    var cls='n'+(read[n.id]?' read':'');
+    var meta='<span class="m-date">'+md(n.date)+'</span><span>'+esc(n.dept)+'</span><span>조회 '+n.views.toLocaleString('ko-KR')+'</span>'+(n.file?'<span>첨부</span>':'')+(n.note&&!n.dl?'<span>'+esc(n.note)+'</span>':'');
+    var why=n.reasons.length?'<div class="why">'+n.reasons.map(function(x){return'<span>'+esc(x)+'</span>'}).join('')+'</div>':'';
+    var hint='';
+    if(n.tags.indexOf('scholarship')>-1&&profile&&(profile.gpa||profile.income)){
+      hint='<div class="hint">내 조건: '+(profile.gpa?'학점 '+esc(profile.gpa):'')+(profile.gpa&&profile.income?' · ':'')+(profile.income?'소득 '+esc(profile.income)+(/^\d+$/.test(profile.income)?'분위':''):'')+'. 지원 자격은 원문에서 확인하세요.</div>';
+    }
+    return '<article class="'+cls+'"><div class="c-cat"><span class="chip">'+esc(n.cat)+'</span></div>'+
+      '<div class="c-main"><a class="ttl" href="'+n.url+'" target="_blank" rel="noopener" data-id="'+n.id+'">'+
+      (n.org?'<span class="org">'+esc(n.org)+'</span> ':'')+esc(n.text)+(isNew(n)?'<span class="new">NEW</span>':'')+'</a>'+
+      '<div class="meta">'+meta+'</div>'+why+hint+'</div>'+
+      '<div class="c-dl">'+dlBadge(n)+'</div><div class="c-date">'+md(n.date)+'</div></article>';
+  }
+  function pool(){
+    if(tab==='me')return N.filter(function(n){return n.score>=2});
+    if(tab==='all')return N.slice();
+    return N.filter(function(n){return n.cat===tab});
+  }
+  function renderTabs(){
+    var items=[['all','전체',N.length],['me','나에게 맞는 공지',N.filter(function(n){return n.score>=2}).length]];
+    var h='';
+    h+=tabBtn('all','전체',N.length,'');
+    h+=tabBtn('me','나에게 맞는 공지',items[1][2],'me');
+    h+='<div class="tabsep"></div>';
+    CATS.forEach(function(c){h+=tabBtn(c,c,N.filter(function(n){return n.cat===c}).length,'')});
+    tabsEl.innerHTML=h;
+  }
+  function tabBtn(key,label,cnt,extra){
+    return '<button type="button" role="tab" class="tab '+extra+'" data-tab="'+esc(key)+'" aria-selected="'+(tab===key)+'">'+esc(label)+' <span class="cnt">'+cnt+'</span></button>';
+  }
+  function render(){
+    enrich(); renderTabs();
+    var q=$('q').value.trim().toLowerCase(), sort=$('sort').value;
+    var base=pool();
+    /* 마감 임박 */
+    var urg=base.filter(function(n){return n.dl&&daysTo(n.dl)>=0}).sort(function(a,b){return daysTo(a.dl)-daysTo(b.dl)}).slice(0,6);
+    var u=$('urgent');
+    if(urg.length){
+      u.hidden=false;
+      u.innerHTML='<h2>마감 임박</h2><div class="urg-row">'+urg.map(function(n){var d=daysTo(n.dl);
+        return '<a class="urg" href="'+n.url+'" target="_blank" rel="noopener" data-id="'+n.id+'"><span>'+dlBadge(n)+'</span><b>'+esc(n.text)+'</b><small>'+esc(n.cat)+'</small></a>'}).join('')+'</div>';
+    }else{u.hidden=true}
+    var list=base.filter(function(n){return !q||(n.title+n.dept).toLowerCase().indexOf(q)>-1});
+    list.sort(function(a,b){
+      if(sort==='deadline'){var ad=a.dl&&daysTo(a.dl)>=0?daysTo(a.dl):9999,bd=b.dl&&daysTo(b.dl)>=0?daysTo(b.dl):9999;return ad-bd||b.id-a.id}
+      if(sort==='views')return b.views-a.views;
+      if(tab==='me'&&b.score!==a.score)return b.score-a.score;
+      return b.date<a.date?-1:b.date>a.date?1:b.id-a.id;
+    });
+    $('listTitle').textContent=tab==='all'?'전체 공지':tab==='me'?'나에게 맞는 공지':tab;
+    $('stamp').textContent='원문 기준 '+STAMP+' 확인 · '+list.length+'건';
+    var out='';
+    if(tab==='me'&&!hasProfile(profile)){
+      out='<div class="empty"><p>내 정보를 입력하면 장학, 알바·인턴, 강연처럼 나에게 맞는 공지만 모아 보여줍니다.</p><button class="btn primary" type="button" data-act="profile">내 정보 입력하기</button></div>';
+    }else if(!list.length){
+      out='<div class="empty"><p>'+(q?'검색 결과가 없습니다.':tab==='me'?'지금 맞는 공지가 없습니다. 관심 분야를 더 추가해 보세요.':'확인된 공지가 없습니다. 원문 게시판에서 직접 확인하세요.')+'</p></div>';
+    }else{out=list.map(row).join('')}
+    $('list').innerHTML=out;
+    var more=$('more');
+    more.href=BASE+(BOARD[tab]||'notice01')+'.do';
+    more.textContent=(BOARD[tab]?tab+' ':'')+'원문 게시판에서 더 보기';
+  }
+
+  /* ---------- events ---------- */
+  tabsEl.addEventListener('click',function(e){var b=e.target.closest('.tab');if(!b)return;tab=b.dataset.tab;render()});
+  $('q').addEventListener('input',render);
+  $('sort').addEventListener('change',render);
+  document.addEventListener('click',function(e){
+    var a=e.target.closest('a[data-id]');
+    if(a){read[a.dataset.id]=1;store('skku_read',JSON.stringify(read));var art=a.closest('.n');if(art)art.classList.add('read')}
+    if(e.target.closest('[data-act="profile"]'))openDrawer();
+  });
+
+  /* ---------- drawer / profile ---------- */
+  var drawer=$('drawer'), scrim=$('scrim');
+  COLLEGES.forEach(function(c){var o=document.createElement('option');o.textContent=c;$('f-college').appendChild(o)});
+  Object.keys(LABEL).forEach(function(k){
+    var l=document.createElement('label');
+    l.innerHTML='<input type="checkbox" value="'+k+'"> '+esc(LABEL[k]);
+    $('interests').appendChild(l);
+  });
+  function fillForm(){
+    var p=profile||{};
+    $('f-status').value=p.status||'';$('f-grade').value=p.grade||'';$('f-campus').value=p.campus||'';
+    $('f-college').value=p.college||'';$('f-major').value=p.major||'';$('f-gpa').value=p.gpa||'';
+    $('f-income').value=p.income||'';$('f-kw').value=p.kw||'';
+    Array.prototype.forEach.call($('interests').querySelectorAll('input'),function(i){i.checked=(p.interests||[]).indexOf(i.value)>-1});
+  }
+  function readForm(){
+    return{status:$('f-status').value,grade:$('f-grade').value,campus:$('f-campus').value,college:$('f-college').value,
+      major:$('f-major').value.trim(),gpa:$('f-gpa').value,income:$('f-income').value,kw:$('f-kw').value.trim(),
+      interests:Array.prototype.filter.call($('interests').querySelectorAll('input'),function(i){return i.checked}).map(function(i){return i.value})};
+  }
+  function openDrawer(){fillForm();buildBrief();drawer.hidden=false;scrim.hidden=false}
+  function closeDrawer(){drawer.hidden=true;scrim.hidden=true}
+  $('openProfile').onclick=openDrawer;$('closeProfile').onclick=closeDrawer;scrim.onclick=closeDrawer;
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&!drawer.hidden)closeDrawer()});
+  $('pform').addEventListener('submit',function(e){
+    e.preventDefault();profile=readForm();store('skku_profile',JSON.stringify(profile));
+    tab=hasProfile(profile)?'me':tab;render();buildBrief();toast('저장했습니다');closeDrawer();
+  });
+  $('reset').onclick=function(){profile=null;store('skku_profile',null);fillForm();render();buildBrief();toast('초기화했습니다')};
+
+  /* ---------- brief ---------- */
+  function buildBrief(){
+    enrich();
+    var lines=['[성대 공지 브리핑] '+todayMid.getFullYear()+'.'+(todayMid.getMonth()+1)+'.'+todayMid.getDate()];
+    var urg=N.filter(function(n){return n.dl&&daysTo(n.dl)>=0}).sort(function(a,b){return daysTo(a.dl)-daysTo(b.dl)}).slice(0,3);
+    if(urg.length){lines.push('','마감 임박');urg.forEach(function(n){var d=daysTo(n.dl);lines.push('· '+(d===0?'오늘':'D-'+d)+' '+n.text)})}
+    var me=N.filter(function(n){return n.score>=2}).sort(function(a,b){return b.score-a.score}).slice(0,3);
+    if(me.length){lines.push('','나에게 맞는 공지');me.forEach(function(n){lines.push('· '+n.text)})}
+    var nw=N.filter(isNew).length;
+    lines.push('','오늘 새 공지 '+nw+'건 · '+BASE+'notice01.do');
+    $('brief').value=lines.join('\n');
+  }
+  $('copyBrief').onclick=function(){
+    var t=$('brief').value;
+    function fb(){$('brief').select();toast('선택했습니다. 직접 복사하세요')}
+    try{navigator.clipboard.writeText(t).then(function(){toast('복사했습니다')},fb)}catch(e){fb()}
+  };
+  var tt;function toast(m){var t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(function(){t.hidden=true},1800)}
+
+  /* ---------- init ---------- */
+  $('today').textContent=now.toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric',weekday:'long'})+' · 학교 전체 공지';
+  setMode(userMode==='pc'||userMode==='phone'?userMode:autoMode(),false);
+  render();
+})();
+</script>
+
+</body></html>
